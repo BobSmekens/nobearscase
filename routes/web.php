@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BearController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -13,6 +15,8 @@ use App\Http\Controllers\AuthController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/import', [BearController::class, 'importForm']);
+Route::post('/import', [BearController::class, 'import'])->name('bear.import');
 
 Route::get('/', function () {
     return view('welcome');

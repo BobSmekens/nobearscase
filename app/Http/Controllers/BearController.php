@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\BearsImport;
 use App\Models\Bear;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class BearController extends Controller
 {
@@ -80,5 +83,19 @@ class BearController extends Controller
     public function search($name)
     {
         return Bear::where('company_name', 'like', '%' . $name.'%')->get();
+    }
+
+
+    //import data from csv
+    public function importForm()
+    {
+        return view('import');
+    }
+
+    public function import() 
+    {
+        Excel::import(new BearsImport, '..\app\imports\example_locations.csv');
+        
+        return redirect('/import')->with('success', 'All good!');
     }
 }
