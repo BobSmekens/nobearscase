@@ -4,75 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Hash;
-use Session;
-
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
-    //
-    public function login()
-    {
-        return view('auth.login');
-    }
 
-    public function registration()
+    public function register(Request $request)
     {
-        return view('auth.registration');
-    }
-
-    public function registerUser(Request $request)
-    {
-        $request->validate([
+        $fields = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|max:12'
+            'password' => 'required|min:5|max:12|confirmed'
         ]);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user = User::create([
+            'name' => $fields['name'],
+            'email' => $fields['email'],
+            'password' => bcrypt($fields['password'])
+        ]);
 
+        $token = $user->createToken('myapptoken')->plainTextToken;
 
-        $res = $user->save();
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
 
-        if ($res) {
-            return back()->with('success', 'You have registered succesfully');
-        } else {
-            return back()->with('failed', 'Something wrong');
-        }
+        return response($response, 201);
     }
 
-    public function loginUser(Request $request)
+    public function logout(Request $request)
     {
-        $request->validate([
+        auth()->user()->tokens()->delete();
+
+        return [
+            'message' => 'logged out'
+        ];
+    }
+
+    public function login(Request $request)
+    {
+        $fields = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:5|max:12'
+            'password' => 'required'
         ]);
 
-        $user = User::where('email', '=', $request->email)->first();
-        if ($user) {
-
-            if (Hash::check($request->password, $user->password)) {
-                $request->session()->pull('loginId', $user->id);
-                return redirect('dashboard');
-            } else {
-                return back()->with('failed', 'Password incorrect');
-            }
-        } else {
-            return back()->with('failed', 'Something wrong');
+        // check email
+        $user = User::where('email', $fields['email'])->first();
+        // check password
+        if (!$user || !Hash::check($fields['password'], $user->password)) {
+            return response([
+                'message' => 'Incorrect'
+            ], 401);
         }
-    }
 
-    public function dashboard()
-    {
-        $user = array();
+        $token = $user->createToken('myapptoken')->plainTextToken;
 
-        if (Session::has('loginId')) {
-            $user = User::where('id', '=', Session::get('loginId'))->first();
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
 
-        }
-    return view('dashboard', compact('user'));
+        return response($response, 201);
     }
 }
