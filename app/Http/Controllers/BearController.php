@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\BearsImport;
+
 use App\Models\Bear;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,17 +28,17 @@ class BearController extends Controller
     public function store(Request $request)
     {
 
-    $request->validate([
-        'company_name' => 'required',
-        'street' => 'required',
-        'street_number' => 'required',
-        'postal_code' => 'required',
-        'city' => 'required',
-        'country' => 'required',
-        'latitude' => 'required',
-        'longitude' => 'required',
-        'email' => 'required'
-    ]);
+        $request->validate([
+            'company_name' => 'required',
+            'street' => 'required',
+            'street_number' => 'required',
+            'postal_code' => 'required',
+            'city' => 'required',
+            'country' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'email' => 'required'
+        ]);
 
         return Bear::create($request->all());
     }
@@ -82,20 +81,30 @@ class BearController extends Controller
 
     public function search($name)
     {
-        return Bear::where('company_name', 'like', '%' . $name.'%')->get();
+        return Bear::where('company_name', 'like', '%' . $name . '%')->get();
     }
 
 
-    //import data from csv
-    public function importForm()
+
+
+    public function bearIndex()
     {
-        return view('import');
+        $bear = Bear::all();
+
+        $bearCollection = $bear;
+
+        $bearJson = $bear->toJson();
+
+        return view('index', ['bearCollection' => $bearCollection]);
     }
 
-    public function import() 
+    public function bearJson()
     {
-        Excel::import(new BearsImport, '..\app\imports\example_locations.csv');
-        
-        return redirect('/import')->with('success', 'All good!');
+        $bear = Bear::all();
+
+        $bearJson = $bear->toJson();
+        return $bearJson;
+
+        // return view('json', ['bearCollection' => $bearJson]);
     }
 }

@@ -15,15 +15,14 @@
 </head>
 
 <body>
-    @if(Route::has('succes'))
-        {{'succes'}}
-    @endif
+<h4>Upload .csv to database</h4><br>
     <form action="{{ url('/import')}}" method="POST" enctype="multipart/form-data">
         @csrf
-        <label for="file">file</label>
-        <input type="file" name="file">
+
+        <input type="file" name="file"><br>
         <button type="submit">submit</button>
     </form>
+
     <script src="" async defer></script>
 </body>
 

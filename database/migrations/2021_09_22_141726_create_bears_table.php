@@ -15,7 +15,7 @@ class CreateBearsTable extends Migration
     {
         Schema::create('bears', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name')->unique();
+            $table->string('company_name');
             $table->string('street');
             $table->string('street_number');
             $table->string('postal_code');   
