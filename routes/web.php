@@ -6,6 +6,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\WebAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,11 +32,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/registerUser', [WebAuthController::class, 'showRegister']);
+Route::get('/loginUser', [WebAuthController::class, 'showLogin']);
+Route::get('/logoutUser', [WebAuthController::class, 'logout']);
+
+Route::post('/registerUser', [WebAuthController::class, 'register']);
+Route::post('/loginUser', [WebAuthController::class, 'login']);
 
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    
     // protected CRUD routes  
     Route::post('/bears', [BearController::class, 'store']);
     Route::put('/bears/{id}', [BearController::class, 'update']);

@@ -18,14 +18,11 @@
             <div class="col-md-4 col-md-offset-4" style="margin-top:20px;">
                 <h4>Login</h4>
                 <hr>
-                <form action="{{('login-user')}}" method="post">
-                    @if(Session::has('success'))
-                    <div class="alert alert-success">{{Session::get('success')}}</div>
+                <form action="/loginUser" method="post">
+                    @if(Session::has('message'))
+                    <div class="alert alert-success">{{Session::get('message')}}</div>
                     @endif
 
-                    @if(Session::has('failed'))
-                    <div class="alert alert-danger">{{Session::get('failed')}}</div>
-                    @endif
                     @csrf
                     <div class="form-group">
                         <label for="email">E-mail</label>
@@ -43,7 +40,7 @@
                     </div>
                 </form>
                 <br>
-                <a href="/register">New user? Register here.</a>
+                <a href="/registerUser">New user? Register here.</a>
             </div>
         </div>
     </div>

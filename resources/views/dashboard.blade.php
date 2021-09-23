@@ -27,20 +27,22 @@
                         <th>Action</th>
                     </thead>
                     <tbody>
-                   
+
                         <tr>
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
-                            <td><a href="logout">Logout</a></td>
+                            <td><a href="/logoutUser/{{$user->Id}}">Logout</a></td>
                         </tr>
-
+                        @if(Session::has('token'))
+                        <div class="alert alert-danger">{{Session::get('token')}}</div>
+                        @endif
                     </tbody>
                 </table>
 
             </div>
         </div>
     </div>
-    
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>

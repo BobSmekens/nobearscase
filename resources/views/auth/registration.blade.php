@@ -17,10 +17,10 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-4" style="margin-top:20px;">
                 <h4>Registration</h4>
-                <a href="/login">Already registered? Login here.</a>
+                <a href="/loginUser">Already registered? Login here.</a>
 
                 <hr>
-                <form action="{{('register-user')}}" method="post">
+                <form action="/registerUser" method="post">
                     @if(Session::has('success'))
                     <div class="alert alert-success">{{Session::get('success')}}</div>
                     @endif
@@ -42,6 +42,7 @@
                         <label for="password">Password</label>
                         <input type="password" class="form-control" placeholder="Enter fullname" name="password" value="">
                         <span class="text-danger">@error('password') {{$message}} @enderror</span>
+                        
 
                     </div>
 

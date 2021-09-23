@@ -98,13 +98,5 @@ class BearController extends Controller
         return view('index', ['bearCollection' => $bearCollection]);
     }
 
-    public function bearJson()
-    {
-        $bear = Bear::all();
 
-        $bearJson = $bear->toJson();
-        return $bearJson;
-
-        // return view('json', ['bearCollection' => $bearJson]);
-    }
 }
