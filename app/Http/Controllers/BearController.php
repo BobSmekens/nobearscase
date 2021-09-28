@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Adrianorosa\GeoLocation\GeoLocation;
 use App\Models\Bear;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class BearController extends Controller
      */
     public function index()
     {
-        return Bear::all();
+        return Bear::where('id', '>', 1);
     }
 
     /**
@@ -94,7 +95,6 @@ class BearController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $bear = Bear::find($id);
 
         $bear->company_name = $request->company_name;
@@ -126,82 +126,97 @@ class BearController extends Controller
         return redirect('/index');
     }
 
-    public function search($name)
+    public function searchBear(Request $request)
     {
-        return Bear::where('company_name', 'like', '%' . $name . '%')->get();
+        $search = $request->search;
+        $bear = Bear::where('company_name', 'like', '%' . $search . '%')->get();
+
+        return view('index', ['bearCollection' => $bear]);
     }
 
 
     public function bearIndex()
     {
-        $bear = Bear::all();
+        $bear = Bear::all()->where('id', '>', 1);
 
         $bearCollection = $bear;
-
-        $bearJson = $bear->toJson();
 
         return view('index', ['bearCollection' => $bearCollection]);
     }
 
     public function sortClosest(Request $request)
     {
-        /////get clients ip//////////////////
-        $clientIp = $request->ip();
+        ////////////////check if search request//////////
+        if ($request->latitude !=0 && $request->longitude != 0) {
+            $clientLatitude = (double)$request->latitude;
+            $clientLongitude = (double)$request->longitude;
+        } else {
 
-        ////////////////////static ip for developing/////////
-        $clientIp = '84.104.140.247';
+            /////get clients ip//////////////////
+            $clientIp = $request->ip();
 
-        $details = GeoLocation::lookup($clientIp);
+            ////////////////////static ip for developing/////////
+            $clientIp = '84.104.140.247';
 
-        $clientLatitude = $details->getLatitude();
-        $clientLongitude = $details->getLongitude();
+            $details = GeoLocation::lookup($clientIp);
 
-        $clientLatitudeInt = (int)$clientLatitude;
-        $clientLongitudeInt = (int)$clientLongitude;
+            $clientLatitude = $details->getLatitude();
+            $clientLongitude = $details->getLongitude();
+        };
+
+        $clientLatitudeInt = (double)$clientLatitude;
+        $clientLongitudeInt = (double)$clientLongitude;
 
         foreach (Bear::all()->where('id', '>', 1) as $bear) {
-            // $bearUpdate = Bear::where('email', $bear->email);
 
             $bearLatitude = $bear->latitude;
-            $bearLatitudeInt = (float)$bearLatitude;
-            $bearLatitudeDistance = $clientLatitude - $bearLatitudeInt;
+            $bearLatitudeInt = (double)$bearLatitude;
+            $bearLatitudeDistance = $clientLatitudeInt - $bearLatitudeInt;
 
             $bearLongitude = $bear->longitude;
-            $bearLongitudeInt = (float)$bearLongitude;
+            $bearLongitudeInt = (double)$bearLongitude;
             $bearLongitudeDistance = $clientLongitudeInt - $bearLongitudeInt;
             $bearDistance = sqrt(array_sum([$bearLongitudeDistance * $bearLongitudeDistance, $bearLatitudeDistance * $bearLatitudeDistance]));
-            // echo $bearDistance . "<br>";
+
             $bear->distance = $bearDistance;
-            // dd($bear);
+
+///////////////////////////update table///////////////////////////
             $bear->save();
         };
-        $bearCollection = Bear::where('distance', '>', 0)->orderBy('distance', 'asc')->get();
-        // dd($bearCollection);
+
+        $bearCollection = Bear::where('id', '>', 1)->orderBy('distance', 'asc')->get();
+
         return view('index', ['bearCollection' => $bearCollection]);
     }
 
     public function sortFurthest(Request $request)
     {
-        /////get clients ip//////////////////
-        $clientIp = $request->ip();
+        if ($request->latitude !=0 && $request->longitude != 0) {
+            $clientLatitude = (double)$request->latitude;
+            $clientLongitude = (double)$request->longitude;
+        } else {
 
-        ////////////////////static ip for developing/////////
-        $clientIp = '84.104.140.247';
+            /////get clients ip//////////////////
+            $clientIp = $request->ip();
 
-        $details = GeoLocation::lookup($clientIp);
+            ////////////////////static ip for developing/////////
+            $clientIp = '84.104.140.247';
 
-        $clientLatitude = $details->getLatitude();
-        $clientLongitude = $details->getLongitude();
+            $details = GeoLocation::lookup($clientIp);
 
-        $clientLatitudeInt = (int)$clientLatitude;
-        $clientLongitudeInt = (int)$clientLongitude;
+            $clientLatitude = $details->getLatitude();
+            $clientLongitude = $details->getLongitude();
+        };
+
+        $clientLatitudeInt = (double)$clientLatitude;
+        $clientLongitudeInt = (double)$clientLongitude;
 
         foreach (Bear::all()->where('id', '>', 1) as $bear) {
             // $bearUpdate = Bear::where('email', $bear->email);
 
             $bearLatitude = $bear->latitude;
             $bearLatitudeInt = (float)$bearLatitude;
-            $bearLatitudeDistance = $clientLatitude - $bearLatitudeInt;
+            $bearLatitudeDistance = $clientLatitudeInt - $bearLatitudeInt;
 
             $bearLongitude = $bear->longitude;
             $bearLongitudeInt = (float)$bearLongitude;
@@ -212,7 +227,7 @@ class BearController extends Controller
             // dd($bear);
             $bear->save();
         };
-        $bearCollection = Bear::where('distance', '>', 0)->orderBy('distance', 'desc')->get();
+        $bearCollection = Bear::where('id', '>', 1)->orderBy('distance', 'desc')->get();
         // dd($bearCollection);
         return view('index', ['bearCollection' => $bearCollection]);
     }

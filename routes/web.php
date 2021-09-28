@@ -32,7 +32,8 @@ Route::middleware(['throttle:global'])->group(function () {
     Route::get('/table', [JsonController::class, 'bearTable']);
     Route::get('/sortclosest', [BearController::class, 'sortClosest']);
     Route::get('/sortfurthest', [BearController::class, 'sortFurthest']);
-
+    Route::get('/searchbear', [Bearcontroller::class, 'searchBear']);
+    Route::get('/radius', [Bearcontroller::class, 'sortClosest']);
 
     ///////////////////////////     CRUD    ///////////////////////////////////
     Route::get('/createbear', [BearController::class, 'storeShow']);
@@ -48,6 +49,8 @@ Route::middleware(['throttle:global'])->group(function () {
     //////////////////////////  download json ///////////////////////////
 
     Route::get('/jsonDownload', [JsonController::class, 'downloadJson']);
+    // Route::get('/jsonDownloadAsc', [JsonController::class, 'downloadJsonAsc']);
+    // Route::get('/jsonDownloadDesc', [JsonController::class, 'downloadJsonDesc']);
 
     ////////////////////////users routes////////////////////
     Route::get('/', [WebAuthController::class, 'showRegister']);

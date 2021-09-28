@@ -4,8 +4,9 @@
 <h4>Showing company: {{$bear->company_name}}</h4>
 <a href="/index">Return to index</a><br>
 @if(Session::has('token'))
-<a href="/updatebear/{{$bear->id}}">Update bear here</a><br>
-
+    @if(session('user')->is_admin ==1)
+    <a href="/updatebear/{{$bear->id}}">Update bear here</a><br>
+    @endif
 @endif
 <div>id: {{$bear->id}}</div>
 <div>company name: {{$bear->company_name}}</div>
@@ -17,6 +18,6 @@
 <div>latitude: {{$bear->latitude}}</div>
 <div>longitude: {{$bear->longitude}}</div>
 <div>email: {{$bear->email}}</div>
-<div>distance: {{$bear->distance}}</div>
+<div>distance: {{round($bear->distance*100)}} km</div>
 
 @stop

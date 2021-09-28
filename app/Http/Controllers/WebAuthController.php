@@ -34,8 +34,6 @@ class WebAuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
         session(['token' => $token]);
 
-
-
         return view('dashboard', [
             'user' => $user
         ]);
@@ -45,6 +43,7 @@ class WebAuthController extends Controller
     public function logout(Request $request)
     {
         session()->forget('token');
+        session()->forget('user');
 
         return view('auth.login', [
             'message' => 'logged out'
@@ -72,6 +71,8 @@ class WebAuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
         session(['token' => $token]);
         
+        session(['user' => $user]);
+
         return view('dashboard', [
            'user' => $user
         ]);

@@ -1,8 +1,9 @@
 @extends('navbar')
 
 @section('content')
-<a href="/index">Return to index</a><br>
+
 @if(Session::has('token'))
+
 <form action="/bear/{{$bear->id}}/update" method="post">
     @if(Session::has('success'))
     <div class="alert alert-success">{{Session::get('success')}}</div>
@@ -30,11 +31,12 @@
         <button class="btn btn-block btn-primary" type="submit">Update bear</button>
     </div>
 </form>
-
+@if(session('user')->is_admin ==1)
 <form action="/bear/{{$bear->id}}/delete" method="post">
 @csrf
     <button type="submit">Delete</button>
 </form>
+@endif
 @else
 You are not logged in
 @endif

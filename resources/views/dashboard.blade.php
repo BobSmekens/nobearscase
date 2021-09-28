@@ -10,6 +10,11 @@
             @if(Session::has('token'))
             <div>Welcome!</div>
             @endif
+
+            @if(session('user')->is_admin ==1)
+                Welcome commander
+            @endif
+
             <hr>
             <table class="table">
                 <h3>your information</h3>
