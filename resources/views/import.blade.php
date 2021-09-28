@@ -13,6 +13,8 @@
         <input type="file" name="file"><br>
         <button type="submit">submit</button>
     </form>
+
+    <a href="/reset">Reset Bears table</a>
     @else
     You are not logged in
     @endif

@@ -29,7 +29,7 @@
                         <span class="text-danger">@error('email') {{$message}} @enderror</span>
 
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" placeholder="Enter fullname" name="password" value="">
+                        <input type="password" class="form-control" placeholder="Enter password" name="password" value="">
                         <span class="text-danger">@error('password') {{$message}} @enderror</span>
                         
 

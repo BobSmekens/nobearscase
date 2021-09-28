@@ -25,6 +25,12 @@ class BearController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function storeShow()
+    {
+        return view('createBear');
+    }
+
     public function store(Request $request)
     {
 
@@ -40,7 +46,23 @@ class BearController extends Controller
             'email' => 'required'
         ]);
 
-        return Bear::create($request->first('email'));
+        $bear = Bear::firstOrCreate([
+            'company_name' => $request->company_name,
+            'street' => $request->street,
+            'street_number' => $request->street_number,
+            'postal_code' => $request->postal_code,
+            'city' => $request->city,
+            'country' => $request->country,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'email' => $request->email
+        ]);
+
+        $bear->save();
+
+        return redirect('/bear/' . $bear->id);
+
+        // return Bear::create($request->first('email'));
     }
 
     /**
@@ -51,7 +73,9 @@ class BearController extends Controller
      */
     public function show($id)
     {
-        return Bear::find($id);
+        $bear = Bear::find($id);
+
+        return view('showBear', ['bear' => $bear]);
     }
 
     /**
@@ -61,11 +85,31 @@ class BearController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function showUpdate($id)
     {
         $bear = Bear::find($id);
-        $bear->update($request->all());
-        // return $bear;
+        return view('updateBear', ['bear' => $bear]);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $bear = Bear::find($id);
+
+        $bear->company_name = $request->company_name;
+        $bear->street = $request->street;
+        $bear->street_number = $request->street_number;
+        $bear->postal_code = $request->postal_code;
+        $bear->city = $request->city;
+        $bear->country = $request->country;
+        $bear->latitude = $request->latitude;
+        $bear->longitude = $request->longitude;
+        $bear->email = $request->email;
+
+        $bear->save();
+
+        return redirect('/bear/' . $bear->id);
     }
 
     /**
@@ -76,15 +120,16 @@ class BearController extends Controller
      */
     public function destroy($id)
     {
-        return Bear::destroy($id);
+        echo "destroy activate";
+        $bear = Bear::find($id);
+        $bear->delete();
+        return redirect('/index');
     }
 
     public function search($name)
     {
         return Bear::where('company_name', 'like', '%' . $name . '%')->get();
     }
-
-
 
 
     public function bearIndex()

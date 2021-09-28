@@ -1,16 +1,16 @@
 @extends('navbar')
 
 @section('content')
-    @if(Session::has('token'))
+
     <a href="/jsonDownload">Download table as Json</a>
     <br>
     <a href="/json">View table as Json</a>
-    <table>
+    <table class="table table-dark">
         @if($bearCollection)
         @foreach($bearCollection as $bear)
         <tr>
-            <td>{{$bear->company_name}}</td>
-            <td>{{$bear->distance}}</td>
+            <td><a style="text-decoration: none; font-weight: 600;" href="/bear/{{$bear->id}}">{{$bear->company_name}}</a></td>
+
             <td>{{$bear->street}}</td>
             <td>{{$bear->street_number}}</td>
             <td>{{$bear->postal_code}}</td>
@@ -23,7 +23,5 @@
         @endforeach
         @endif
     </table>
-    @else
-    You are not logged in
-@endif
+
 @stop

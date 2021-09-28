@@ -19,7 +19,7 @@ use App\Http\Controllers\AuthController;
 // Route::resource('bears', BearController::class);
 
 // public Routes
-Route::get('/api/bears', [BearController::class, 'index']);
+Route::get('/api/bears', [BearController::class, 'bearIndex']);
 Route::get('/api/bears/{id}', [BearController::class, 'show']);
 Route::get('/api/bears/search/{name}', [BearController::class, 'search']);
 

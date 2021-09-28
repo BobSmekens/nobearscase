@@ -22,22 +22,16 @@ class ImportController extends Controller
         DB::table('bears')->truncate();
         Excel::import(new BearsImport, request()->file('file'));
 
-        $bearCollection = Bear::all();
-        foreach($bearCollection as $bear){
-            // echo $bear->email;
-            // echo $bear->longitude;
-            
-            $bearLatitude = $bear->latitude;
-            $bearLatitudeInt = (double)$bearLatitude;
-            // echo $bearLatitudeInt;
-            $bearLongitude = $bear->longitude;
-            $bearLongitudeInt = (double)$bearLongitude;
-            $bearDistance = sqrt(($bearLongitudeInt*$bearLongitudeInt + $bearLatitudeInt*$bearLatitudeInt));
-            $bear->distance = $bearDistance;
-            echo $bear->distance;
-        };
-
         return back()->with('uploaded', 'upload is completed');
+    }
+    public function resetTable()
+    {
+
+        $file = public_path() . "/storage/example_locations.csv";
+        DB::table('bears')->truncate();
+        Excel::import(new BearsImport, $file);
+
+        return back()->with('uploaded', 'reset is completed');
     }
 
 
