@@ -23,14 +23,18 @@ class WebAuthController extends Controller
             'password' => 'required',
         ]);
 
+
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'is_admin' => -1
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
         session(['token' => $token]);
+
+
 
         return view('dashboard', [
             'user' => $user
@@ -65,7 +69,9 @@ class WebAuthController extends Controller
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return back()->with('message', 'wrong credentials');
         }
-
+        $token = $user->createToken('myapptoken')->plainTextToken;
+        session(['token' => $token]);
+        
         return view('dashboard', [
            'user' => $user
         ]);

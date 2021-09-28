@@ -18,6 +18,7 @@ class Bear extends Model
         'country',
         'latitude',
         'longitude',
-         'email'
+         'email',
+         'distance'
     ];
 }

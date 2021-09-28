@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Adrianorosa\GeoLocation\GeoLocation;
 use App\Models\Bear;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -40,7 +40,7 @@ class BearController extends Controller
             'email' => 'required'
         ]);
 
-        return Bear::create($request->all());
+        return Bear::create($request->first('email'));
     }
 
     /**
@@ -98,5 +98,77 @@ class BearController extends Controller
         return view('index', ['bearCollection' => $bearCollection]);
     }
 
+    public function sortClosest(Request $request)
+    {
+        /////get clients ip//////////////////
+        $clientIp = $request->ip();
 
+        ////////////////////static ip for developing/////////
+        $clientIp = '84.104.140.247';
+
+        $details = GeoLocation::lookup($clientIp);
+
+        $clientLatitude = $details->getLatitude();
+        $clientLongitude = $details->getLongitude();
+
+        $clientLatitudeInt = (int)$clientLatitude;
+        $clientLongitudeInt = (int)$clientLongitude;
+
+        foreach (Bear::all()->where('id', '>', 1) as $bear) {
+            // $bearUpdate = Bear::where('email', $bear->email);
+
+            $bearLatitude = $bear->latitude;
+            $bearLatitudeInt = (float)$bearLatitude;
+            $bearLatitudeDistance = $clientLatitude - $bearLatitudeInt;
+
+            $bearLongitude = $bear->longitude;
+            $bearLongitudeInt = (float)$bearLongitude;
+            $bearLongitudeDistance = $clientLongitudeInt - $bearLongitudeInt;
+            $bearDistance = sqrt(array_sum([$bearLongitudeDistance * $bearLongitudeDistance, $bearLatitudeDistance * $bearLatitudeDistance]));
+            // echo $bearDistance . "<br>";
+            $bear->distance = $bearDistance;
+            // dd($bear);
+            $bear->save();
+        };
+        $bearCollection = Bear::where('distance', '>', 0)->orderBy('distance', 'asc')->get();
+        // dd($bearCollection);
+        return view('index', ['bearCollection' => $bearCollection]);
+    }
+
+    public function sortFurthest(Request $request)
+    {
+        /////get clients ip//////////////////
+        $clientIp = $request->ip();
+
+        ////////////////////static ip for developing/////////
+        $clientIp = '84.104.140.247';
+
+        $details = GeoLocation::lookup($clientIp);
+
+        $clientLatitude = $details->getLatitude();
+        $clientLongitude = $details->getLongitude();
+
+        $clientLatitudeInt = (int)$clientLatitude;
+        $clientLongitudeInt = (int)$clientLongitude;
+
+        foreach (Bear::all()->where('id', '>', 1) as $bear) {
+            // $bearUpdate = Bear::where('email', $bear->email);
+
+            $bearLatitude = $bear->latitude;
+            $bearLatitudeInt = (float)$bearLatitude;
+            $bearLatitudeDistance = $clientLatitude - $bearLatitudeInt;
+
+            $bearLongitude = $bear->longitude;
+            $bearLongitudeInt = (float)$bearLongitude;
+            $bearLongitudeDistance = $clientLongitudeInt - $bearLongitudeInt;
+            $bearDistance = sqrt(array_sum([$bearLongitudeDistance * $bearLongitudeDistance, $bearLatitudeDistance * $bearLatitudeDistance]));
+            // echo $bearDistance . "<br>";
+            $bear->distance = $bearDistance;
+            // dd($bear);
+            $bear->save();
+        };
+        $bearCollection = Bear::where('distance', '>', 0)->orderBy('distance', 'desc')->get();
+        // dd($bearCollection);
+        return view('index', ['bearCollection' => $bearCollection]);
+    }
 }

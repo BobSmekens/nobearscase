@@ -2,15 +2,14 @@
 
 @section('content')
     @if(Session::has('token'))
-    <a href="/jsonDownload">Download table as Json</a>
+    <a href="/jsonDownloadClosest">Download table as Json</a>
     <br>
-    <a href="/json">View table as Json</a>
+    <a href="/jsonClosest">View table as Json</a>
     <table>
         @if($bearCollection)
         @foreach($bearCollection as $bear)
         <tr>
             <td>{{$bear->company_name}}</td>
-            <td>{{$bear->distance}}</td>
             <td>{{$bear->street}}</td>
             <td>{{$bear->street_number}}</td>
             <td>{{$bear->postal_code}}</td>

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
-
+use Geographical;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +19,8 @@ class User extends Model
         'email',
         'password'
     ];
+
+    protected static $kilometers = true;
 }
 
 

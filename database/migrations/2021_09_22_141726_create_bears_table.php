@@ -23,7 +23,8 @@ class CreateBearsTable extends Migration
             $table->string('country');  
             $table->string('latitude');  
             $table->string('longitude');
-            $table->string('email');              
+            $table->string('email')->unique(); 
+            $table->string('distance')->nullable();
             $table->timestamps();
         });
     }
