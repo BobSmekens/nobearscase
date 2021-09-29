@@ -19,9 +19,9 @@ use App\Http\Controllers\AuthController;
 // Route::resource('bears', BearController::class);
 
 // public Routes
-Route::get('/api/bears', [BearController::class, 'bearIndex']);
-Route::get('/api/bears/{id}', [BearController::class, 'show']);
-Route::get('/api/bears/search/{name}', [BearController::class, 'search']);
+Route::get('/api/bears', [BearApiController::class, 'bearIndex']);
+Route::get('/api/bears/{id}', [BearApiController::class, 'show']);
+Route::get('/api/bears/search/{name}', [BearApiController::class, 'search']);
 
 // public auth routes
 Route::post('/api/register', [AuthController::class, 'register']);
@@ -30,9 +30,9 @@ Route::post('/api/login', [AuthController::class, 'login']);
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // protected CRUD routes  
-    Route::post('/api/bears', [BearController::class, 'store']);
-    Route::put('/api/bears/{id}', [BearController::class, 'update']);
-    Route::delete('/api/bears/{id}', [BearController::class, 'destroy']);
+    Route::post('/api/bears', [BearApiController::class, 'store']);
+    Route::put('/api/bears/{id}', [BearApiController::class, 'update']);
+    Route::delete('/api/bears/{id}', [BearApiController::class, 'destroy']);
 
     //protected Auth routes
     Route::post('/api/logout', [AuthController::class, 'logout']);

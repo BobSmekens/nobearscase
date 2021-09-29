@@ -20,7 +20,7 @@ class WebAuthController extends Controller
         $fields = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
 
@@ -32,8 +32,11 @@ class WebAuthController extends Controller
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
-        session(['token' => $token]);
-
+        session([
+            'token' => $token,
+            'user' => $user
+        ]);
+        
         return view('dashboard', [
             'user' => $user
         ]);

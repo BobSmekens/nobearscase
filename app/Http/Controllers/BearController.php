@@ -181,8 +181,9 @@ class BearController extends Controller
             $bear->distance = $bearDistance;
 
 ///////////////////////////update table///////////////////////////
-            $bear->save();
+            // $bear->save();
         };
+        
 
         $bearCollection = Bear::where('id', '>', 1)->orderBy('distance', 'asc')->get();
 
@@ -212,7 +213,6 @@ class BearController extends Controller
         $clientLongitudeInt = (double)$clientLongitude;
 
         foreach (Bear::all()->where('id', '>', 1) as $bear) {
-            // $bearUpdate = Bear::where('email', $bear->email);
 
             $bearLatitude = $bear->latitude;
             $bearLatitudeInt = (float)$bearLatitude;
@@ -222,13 +222,13 @@ class BearController extends Controller
             $bearLongitudeInt = (float)$bearLongitude;
             $bearLongitudeDistance = $clientLongitudeInt - $bearLongitudeInt;
             $bearDistance = sqrt(array_sum([$bearLongitudeDistance * $bearLongitudeDistance, $bearLatitudeDistance * $bearLatitudeDistance]));
-            // echo $bearDistance . "<br>";
+
             $bear->distance = $bearDistance;
-            // dd($bear);
-            $bear->save();
+
+            // $bear->save();
         };
         $bearCollection = Bear::where('id', '>', 1)->orderBy('distance', 'desc')->get();
-        // dd($bearCollection);
+
         return view('index', ['bearCollection' => $bearCollection]);
     }
 }
