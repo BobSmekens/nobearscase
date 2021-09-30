@@ -22,3 +22,6 @@ Het registreren/inloggen en het crud systeem worden allen nog niet goed gevalide
 ...en waarschijnlijk zijn er nog tal van dingen te bedenken
 
 Al met al vond ik het super tof om het programmeren na meer dan 2 jaar weer op te pakke, veel plezier met het doorspitten van de code
+
+admin user = bob@bob.nl pw: bbb
+regular user = aron@aron.nl pw: aaa
