@@ -1,4 +1,4 @@
-Een minimale webapp die ik alleen lokaal op  een testserver heb gedraait.
+Een webapp die ik alleen lokaal op  een testserver heb gedraait.
 
 Gebruikt een bears en een users table in mySQL via xampp
 
